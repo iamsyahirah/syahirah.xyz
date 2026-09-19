@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Syahirah — Web Developer</title>
+    <meta name="description" content="Syahirah is a Malaysia-based web developer and IoT builder creating practical web applications, digital tools, and connected solutions.">
+    <link rel="canonical" href="https://syahirah.xyz">
+    <meta name="theme-color" content="#FAF9F5">
+
+    <!-- Open Graph Metadata -->
+    <meta property="og:title" content="Syahirah — Web Developer & IoT Builder">
+    <meta property="og:description" content="Building practical web applications, digital tools, and connected IoT solutions. Based in Malaysia.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://syahirah.xyz">
+
+    <!-- Google Fonts: Inter & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        surface: {
+                            50: '#FAF9F5',
+                            100: '#F4F2EB',
+                            200: '#E8E5DC',
+                            300: '#D7D3C5',
+                            800: '#22211F',
+                            900: '#171615',
+                        },
+                        ink: {
+                            DEFAULT: '#1A1918',
+                            muted: '#66635D',
+                            light: '#949086',
+                        },
+                        accent: {
+                            DEFAULT: '#0F766E', // Muted Teal
+                            hover: '#115E59',
+                            subtle: '#E6F4F1',
+                            border: '#99F6E4',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Custom CSS & Accessibility Tweaks -->
+    <style>
+        body {
+            background-color: #FAF9F5;
+            color: #1A1918;
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        /* Focus state accessibility */
+        a:focus-visible, button:focus-visible {
+            outline: 2px solid #0F766E;
+            outline-offset: 2px;
+        }
+
+        /* Scroll reveal animation styles */
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Custom subtle scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF9F5;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D7D3C5;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #949086;
+        }
+
+        /* Pulse wave keyframe for IoT telemetry status */
+        @keyframes subtlePulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.96); }
+        }
+        .animate-subtle-pulse {
+            animation: subtlePulse 3s ease-in-out infinite;
+        }
+
+        /* Reduced motion preferences support */
+        @media (prefers-reduced-motion: reduce) {
+            .reveal {
+                opacity: 1 !important;
+                transform: none !important;
+                transition: none !important;
+            }
+            .animate-subtle-pulse {
+                animation: none !important;
+            }
+            html {
+                scroll-behavior: auto !important;
+            }
+        }
+    </style>
+</head>
+<body class="selection:bg-accent-subtle selection:text-accent">
+
+    <!-- Sticky Navigation Bar -->
+    <header id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b border-transparent py-5">
+        <div class="max-w-6xl mx-auto px-6 sm:px-8 flex items-center justify-between">
+            <!-- Logo / Brand -->
+            <a href="#hero" class="group flex items-center gap-2 font-mono text-sm tracking-tight font-semibold text-ink hover:text-accent transition-colors">
+                <span class="w-2.5 h-2.5 rounded-full bg-accent inline-block"></span>
+                <span>SYAHIRAH.XYZ</span>
+            </a>
+
+            <!-- Desktop Links -->
+            <nav class="hidden md:flex items-center space-x-8 text-sm font-medium text-ink-muted">
+                <a href="#work" class="hover:text-ink transition-colors">Work</a>
+                <a href="#iot" class="hover:text-ink transition-colors">IoT</a>
+                <a href="#about" class="hover:text-ink transition-colors">About</a>
+                <a href="#skills" class="hover:text-ink transition-colors">Skills</a>
+                <a href="#contact" class="hover:text-ink transition-colors">Contact</a>
+                
+            </nav>
+
+            <!-- Mobile Hamburger Button -->
+            <button id="mobile-menu-btn" type="button" aria-label="Toggle Navigation Menu" class="md:hidden p-2 rounded-lg text-ink hover:bg-surface-100 transition-colors">
+                <i data-lucide="menu" id="menu-icon-open" class="w-5 h-5 block"></i>
+                <i data-lucide="x" id="menu-icon-close" class="w-5 h-5 hidden"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Drawer Overlay -->
+        <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 right-0 bg-surface-50 border-b border-surface-200 px-6 py-6 shadow-lg transition-all">
+            <nav class="flex flex-col space-y-4 font-medium text-base text-ink-muted">
+                <a href="#work" class="mobile-nav-link hover:text-ink py-1 border-b border-surface-100">Work</a>
+                <a href="#iot" class="mobile-nav-link hover:text-ink py-1 border-b border-surface-100">IoT</a>
+                <a href="#about" class="mobile-nav-link hover:text-ink py-1 border-b border-surface-100">About</a>
+                <a href="#skills" class="mobile-nav-link hover:text-ink py-1 border-b border-surface-100">Skills</a>
+                <a href="#contact" class="mobile-nav-link hover:text-ink py-1 border-b border-surface-100">Contact</a>
+                
+            </nav>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-6 sm:px-8 pt-28 sm:pt-36">
+
+        <!-- Hero Section -->
+        <section id="hero" class="min-h-[80vh] flex flex-col justify-between pb-16">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-start">
+                
+                <!-- Left Hero Content -->
+                <div class="lg:col-span-8 space-y-8 reveal">
+                    
+                    <!-- Availability & Eyebrow Tag -->
+                    <div class="inline-flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-surface-100 border border-surface-200 text-xs font-mono text-ink-muted">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                        <span>Based in Malaysia · Open to opportunities</span>
+                    </div>
+
+                    <!-- Main Headings -->
+                    <div class="space-y-3">
+                        <span class="block font-mono text-xs tracking-wider uppercase text-accent font-semibold">WEB DEVELOPER · IoT BUILDER</span>
+                        <h1 class="text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-ink leading-[1.08]">
+                            Hi, I'm Syahirah.
+                        </h1>
+                        <p class="text-2xl sm:text-3xl text-ink-muted font-normal tracking-tight max-w-2xl pt-1">
+                            Building practical digital products with code.
+                        </p>
+                    </div>
+
+                    <!-- Supporting Text -->
+                    <p class="text-base sm:text-lg text-ink-muted max-w-xl leading-relaxed">
+                        I build practical web applications, digital tools, and connected IoT solutions — turning ideas into useful, working products.
+                    </p>
+
+                    <!-- CTAs -->
+                    <div class="pt-2 flex flex-wrap items-center gap-4">
+                        <a href="#work" class="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-ink text-surface-50 hover:bg-surface-800 transition-all text-sm font-medium shadow-sm group">
+                            <span>View My Work</span>
+                            <i data-lucide="arrow-down-right" class="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:translate-y-0.5"></i>
+                        </a>
+                        <a href="#contact" class="inline-flex items-center gap-2 px-6 py-3 rounded-lg border border-surface-200 bg-surface-50 hover:bg-surface-100 text-ink transition-all text-sm font-medium">
+                            <i data-lucide="message-circle" class="w-4 h-4 text-ink-muted"></i>
+                            <span>Get in Touch</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Right Technical/Builder Composition Widget -->
+                <div class="lg:col-span-4 reveal">
+                    <div class="p-6 rounded-2xl bg-surface-100 border border-surface-200 space-y-6">
+                        <div class="flex items-center justify-between pb-4 border-b border-surface-200">
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="terminal" class="w-4 h-4 text-accent"></i>
+                                <span class="font-mono text-xs uppercase tracking-wider text-ink font-medium">Focus Areas</span>
+                            </div>
+                            <span class="font-mono text-[10px] px-2 py-0.5 rounded bg-surface-200 text-ink-muted">SYS.2026</span>
+                        </div>
+
+                        <!-- Stack Pillars -->
+                        <div class="space-y-4">
+                            <div class="group p-3 rounded-xl bg-surface-50 border border-surface-200/80 hover:border-accent/40 transition-colors">
+                                <div class="flex justify-between items-baseline mb-1">
+                                    <span class="font-mono text-xs font-bold text-accent">01</span>
+                                    <span class="text-[11px] font-mono text-ink-light">WEB APPLICATIONS</span>
+                                </div>
+                                <p class="text-xs text-ink-muted font-medium">Full-stack web tools, dashboards & practical management platforms.</p>
+                            </div>
+
+                            <div class="group p-3 rounded-xl bg-surface-50 border border-surface-200/80 hover:border-accent/40 transition-colors">
+                                <div class="flex justify-between items-baseline mb-1">
+                                    <span class="font-mono text-xs font-bold text-accent">02</span>
+                                    <span class="text-[11px] font-mono text-ink-light">IOT SYSTEMS</span>
+                                </div>
+                                <p class="text-xs text-ink-muted font-medium">ESP32 microcontrollers, telemetry sensors & cloud sync.</p>
+                            </div>
+
+                            <div class="group p-3 rounded-xl bg-surface-50 border border-surface-200/80 hover:border-accent/40 transition-colors">
+                                <div class="flex justify-between items-baseline mb-1">
+                                    <span class="font-mono text-xs font-bold text-accent">03</span>
+                                    <span class="text-[11px] font-mono text-ink-light">DIGITAL PRODUCTS</span>
+                                </div>
+                                <p class="text-xs text-ink-muted font-medium">Lightweight UI prototypes, API integrations & student utilities.</p>
+                            </div>
+                        </div>
+
+                        <!-- Status Bar -->
+                        <div class="pt-2 border-t border-surface-200 flex items-center justify-between text-[11px] font-mono text-ink-muted">
+                            <span class="flex items-center gap-1.5">
+                                <span class="w-1.5 h-1.5 rounded-full bg-accent"></span>
+                                Stack: JS / PHP / ESP32
+                            </span>
+                            <span>MY · UTC+8</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Quick Editorial Stats Section -->
+        <section class="py-10 border-y border-surface-200 my-8 reveal">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-left">
+                <div class="space-y-1">
+                    <span class="font-mono text-xs font-semibold text-accent block">01</span>
+                    <h3 class="text-sm font-semibold text-ink">Web Development</h3>
+                    <p class="text-xs text-ink-muted">Modern UI & backends</p>
+                </div>
+                <div class="space-y-1">
+                    <span class="font-mono text-xs font-semibold text-accent block">02</span>
+                    <h3 class="text-sm font-semibold text-ink">IoT & Embedded</h3>
+                    <p class="text-xs text-ink-muted">ESP32 & real-time telemetry</p>
+                </div>
+                <div class="space-y-1">
+                    <span class="font-mono text-xs font-semibold text-accent block">03</span>
+                    <h3 class="text-sm font-semibold text-ink">Digital Products</h3>
+                    <p class="text-xs text-ink-muted">Utility & workflow tools</p>
+                </div>
+                <div class="space-y-1">
+                    <span class="font-mono text-xs font-semibold text-accent block">04</span>
+                    <h3 class="text-sm font-semibold text-ink">Malaysia</h3>
+                    <p class="text-xs text-ink-muted">Remote or local collaboration</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Selected Work Showcase -->
+        <section id="work" class="py-20 space-y-16">
+            
+            <!-- Section Title -->
+            <div class="max-w-2xl space-y-3 reveal">
+                <div class="inline-flex items-center gap-2">
+                    <i data-lucide="folder-git-2" class="w-4 h-4 text-accent"></i>
+                    <span class="font-mono text-xs uppercase tracking-wider text-accent font-semibold">Featured Projects</span>
+                </div>
+                <h2 class="text-3xl sm:text-4xl font-bold tracking-tight text-ink">Selected Work</h2>
+                <p class="text-ink-muted text-base">
+                    A selection of practical dashboard and management-system interfaces built for real small-business and service workflows.
+                </p>
+            </div>
+
+            <!-- FEATURED PROJECT 01: An-Nur Quran Class -->
+            <div class="group rounded-2xl bg-surface-100 border border-surface-200 overflow-hidden p-6 sm:p-10 reveal hover:border-surface-300 transition-colors">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                    <div class="lg:col-span-5 space-y-6">
+                        <div class="flex items-center justify-between gap-4">
+                            <span class="font-mono text-xs text-accent font-semibold tracking-wider">01 · MANAGEMENT SYSTEM</span>
+                            <span class="px-2.5 py-0.5 rounded-full bg-accent-subtle text-accent font-mono text-[11px]">Demo</span>
+                        </div>
+                        <h3 class="text-2xl sm:text-3xl font-bold text-ink">An-Nur Quran Class</h3>
+                        <p class="text-ink-muted text-sm sm:text-base leading-relaxed">
+                            A clean management dashboard for Quran classes, covering students, tutors, classes, attendance, schedules, monthly fees, reports and settings in one interface.
+                        </p>
+                        <div class="flex flex-wrap gap-2 pt-2">
+                            <span class="px-2.5 py-1 rounded-md bg-surface-50 border border-surface-200 text-ink-muted font-mono text-xs">PHP</span>
+                            <span class="px-2.5 py-1 rounded-md bg-surface-50 border border-surface-200 text-ink-muted font-mono text-xs">MySQL</span>
+                            <span class="px-2.5 py-1 rounded-md bg-surface-50 border border-surface-200 text-ink-muted font-mono text-xs">Bootstrap</span>
+                            <span class="px-2.5 py-1 rounded-md bg-surface-50 border border-surface-200 text-ink-muted font-mono text-xs">PDF Receipts</span>
+                        </div>
+                        <div>
+                            <a href="https://an-nur-quran.netlify.app/" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            class="inline-flex items-center gap-2 text-sm font-medium text-ink hover:text-accent transition-colors pt-2 group/btn">
+                                <span>View Project Details</span>
+                                <i data-lucide="arrow-up-right" class="w-4 h-4 transition-transform group-hover/btn:-translate-y-0.5 group-hover/btn:translate-x-0.5"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-7">
+                        <div class="rounded-2xl border border-surface-200 bg-surface-50 shadow-sm overflow-hidden">
+                            <div class="bg-surface-200/70 px-4 py-2.5 border-b border-surface-200 flex items-center justify-between">
+                                <div class="flex items-center space-x-1.5">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-red-400/80 inline-block"></span>
+                                    <span class="w-2.5 h-2.5 rounded-full bg-amber-400/80 inline-block"></span>
+                                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-400/80 inline-block"></span>
+                                </div>
+                                <span class="font-mono text-[10px] sm:text-[11px] text-ink-muted">an-nur-quran-class / dashboard</span>
+                                <i data-lucide="layout-dashboard" class="w-3.5 h-3.5 text-ink-light"></i>
+                            </div>
+                            <div class="p-2 sm:p-3 bg-surface-100">
+                                <img src="assets/an-nur-quran-dashboard.png" alt="An-Nur Quran Class dashboard screenshot" class="w-full h-auto rounded-lg border border-surface-200 object-cover" loading="lazy">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FEATURED PROJECT 02: Orbit Attendance -->
+            <div class="group rounded-2xl bg-surface-100 border border-surface-200 overflow-hidden p-6 sm:p-10 reveal hover:border-surface-300 transition-colors">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                    <div class="lg:col-span-7 order-2 lg:order-1">
+                        <div class="rounded-2xl border border-surface-200 bg-surface-50 shadow-sm overflow-hidden">
+                            <div class="bg-surface-200/70 px-4 py-2.5 border-b border-surface-200 flex items-center justify-between">
+                                <div class="flex items-center space-x-1.5">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-red-400/80 inline-block"></span>
+                                    <span class="w-2.5 h-2.5 rounded-full bg-amber-400/80 inline-block"></span>
+                                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-400/80 inline-block"></span>
+                                </div>
+                                <span class="font-mono text-[10px] sm:text-[11px] text-ink-muted">orbit-attendance / admin</span>
+                                <i data-lucide="users-round" class="w-3.5 h-3.5 text-ink-light"></i>
+                            </div>
+                            <div class="p-2 sm:p-3 bg-surface-100">
+                                <img src="assets/orbit-attendance-dashboard.png" alt="Orbit Attendance admin dashboard screenshot" class="w-full h-auto rounded-lg border border-surface-200 object-cover" loading="lazy">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-5 space-y-6 order-1 lg:order-2">
+                        <div class="flex items-center justify-between gap-4">
+                            <span class="font-mono text-xs text-accent font-semibold tracking-wider">02 · ATTENDANCE SYSTEM</span>
+                            <span class="px-2.5 py-0.5 rounded-full bg-accent-subtle text-accent font-mono text-[11px]">Demo</span>
+                        </div>
+                        <h3 class="text-2xl sm:text-3xl font-bold text-ink">Orbit Attendance</h3>
+                        <p class="text-ink-muted text-sm sm:text-base leading-relaxed">
+                            An SME attendance dashboard designed for administrators to monitor staff clock-in and clock-out records, lateness, absences and daily attendance status from a single view.
+                        </p>
+                        <div class="flex flex-wrap gap-2 pt-2">
+                            <span class="px-2.5 py-1 rounded-md bg-surface-50 border border-surface-200 text-ink-muted font-mono text-xs">Laravel</span>
+                            <span class="px-2.5 py-1 rounded-md bg-surface-50 border border-surface-200 text-ink-muted font-mono text-xs">MySQL</span>
+                            <span class="px-2.5 py-1 rounded-md bg-surface-50 border border-surface-200 text-ink-muted font-mono text-xs">REST API</span>
+                            <span class="px-2.5 py-1 rounded-md bg-surface-50 border border-surface-200 text-ink-muted font-mono text-xs">Chart.js</span>
+                        </div>
+                        <div>
+                            <a href="#contact" class="inline-flex items-center gap-2 text-sm font-medium text-ink hover:text-accent transition-colors pt-2 group/btn">
+                                <span>View Project Details</span>
+                                <i data-lucide="arrow-up-right" class="w-4 h-4 transition-transform group-hover/btn:-translate-y-0.5 group-hover/btn:translate-x-0.5"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FEATURED PROJECT 03: SensoryCare -->
+            <div class="group rounded-2xl bg-surface-100 border border-surface-200 overflow-hidden p-6 sm:p-10 reveal hover:border-surface-300 transition-colors">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                    <div class="lg:col-span-5 space-y-6">
+                        <div class="flex items-center justify-between gap-4">
+                            <span class="font-mono text-xs text-accent font-semibold tracking-wider">03 · TUTOR MANAGEMENT</span>
+                            <span class="px-2.5 py-0.5 rounded-full bg-accent-subtle text-accent font-mono text-[11px]">Demo</span>
+                        </div>
+                        <h3 class="text-2xl sm:text-3xl font-bold text-ink">Sensory Care</h3>
+                        <p class="text-ink-muted text-sm sm:text-base leading-relaxed">
+                            A solo-tutor management interface for organising students, home-visit sessions, payments, reports and daily actions with a friendly, service-focused dashboard experience.
+                        </p>
+                        <div class="flex flex-wrap gap-2 pt-2">
+                            <span class="px-2.5 py-1 rounded-md bg-surface-50 border border-surface-200 text-ink-muted font-mono text-xs">PHP</span>
+                            <span class="px-2.5 py-1 rounded-md bg-surface-50 border border-surface-200 text-ink-muted font-mono text-xs">MySQL</span>
+                            <span class="px-2.5 py-1 rounded-md bg-surface-50 border border-surface-200 text-ink-muted font-mono text-xs">FullCalendar</span>
+                            <span class="px-2.5 py-1 rounded-md bg-surface-50 border border-surface-200 text-ink-muted font-mono text-xs">PDF Reports</span>
+                        </div>
+                        <div>
+                            <a href="#contact" class="inline-flex items-center gap-2 text-sm font-medium text-ink hover:text-accent transition-colors pt-2 group/btn">
+                                <span>View Project Details</span>
+                                <i data-lucide="arrow-up-right" class="w-4 h-4 transition-transform group-hover/btn:-translate-y-0.5 group-hover/btn:translate-x-0.5"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-7">
+                        <div class="rounded-2xl border border-surface-200 bg-surface-50 shadow-sm overflow-hidden">
+                            <div class="bg-surface-200/70 px-4 py-2.5 border-b border-surface-200 flex items-center justify-between">
+                                <div class="flex items-center space-x-1.5">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-red-400/80 inline-block"></span>
+                                    <span class="w-2.5 h-2.5 rounded-full bg-amber-400/80 inline-block"></span>
+                                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-400/80 inline-block"></span>
+                                </div>
+                                <span class="font-mono text-[10px] sm:text-[11px] text-ink-muted">sensorycare / tutor-dashboard</span>
+                                <i data-lucide="calendar-days" class="w-3.5 h-3.5 text-ink-light"></i>
+                            </div>
+                            <div class="p-2 sm:p-3 bg-surface-100">
+                                <img src="assets/sensorycare-dashboard.png" alt="SensoryCare tutor management dashboard screenshot" class="w-full h-auto rounded-lg border border-surface-200 object-cover" loading="lazy">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- More Experiments / Other Projects Grid -->
+        <section class="py-12 border-t border-surface-200 space-y-10">
+            <div class="space-y-2 reveal">
+                <span class="font-mono text-xs text-accent font-semibold uppercase tracking-wider">Engineering Portfolio</span>
+                <h3 class="text-2xl font-bold text-ink">More Engineering Projects</h3>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                
+                <!-- Project 04: Cybersecurity Incident Reporting System -->
+                <div class="group p-6 rounded-xl bg-surface-100 border border-surface-200 hover:border-surface-300 transition-all reveal flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between font-mono text-xs">
+                            <span class="text-accent font-semibold">04</span>
+                            <span class="text-ink-muted uppercase text-[10px]">SECURITY WEB APP</span>
+                        </div>
+                        <h4 class="text-xl font-bold text-ink group-hover:text-accent transition-colors">Cybersecurity Incident Reporting</h4>
+                        <p class="text-xs text-ink-muted leading-relaxed">
+                            A secure incident-management application for reporting, classifying, assigning and tracking cybersecurity cases with role-based workflows and audit-ready records.
+                        </p>
+                    </div>
+                    <div class="pt-6 space-y-3">
+                        <div class="font-mono text-[11px] text-ink-light">PHP · MySQL · RBAC · Audit Logs</div>
+                        <a href="#contact" class="inline-flex items-center gap-1.5 text-xs font-mono font-medium text-ink hover:text-accent transition-colors">
+                            <span>View Project</span>
+                            <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Project 05: Quran Desktop Search -->
+                <div class="group p-6 rounded-xl bg-surface-100 border border-surface-200 hover:border-surface-300 transition-all reveal flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between font-mono text-xs">
+                            <span class="text-accent font-semibold">05</span>
+                            <span class="text-ink-muted uppercase text-[10px]">DESKTOP APPLICATION</span>
+                        </div>
+                        <h4 class="text-xl font-bold text-ink group-hover:text-accent transition-colors">Quran Desktop Search</h4>
+                        <p class="text-xs text-ink-muted leading-relaxed">
+                            A cross-platform desktop application for fast Quran word search and local text exploration using an offline SQLite database and a lightweight Electron interface.
+                        </p>
+                    </div>
+                    <div class="pt-6 space-y-3">
+                        <div class="font-mono text-[11px] text-ink-light">Electron · SQLite · IPC · Local Search</div>
+                        <a href="#contact" class="inline-flex items-center gap-1.5 text-xs font-mono font-medium text-ink hover:text-accent transition-colors">
+                            <span>View Project</span>
+                            <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Project 06: Smart Street Light Platform -->
+                <div class="group p-6 rounded-xl bg-surface-100 border border-surface-200 hover:border-surface-300 transition-all reveal flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between font-mono text-xs">
+                            <span class="text-accent font-semibold">06</span>
+                            <span class="text-ink-muted uppercase text-[10px]">IOT PLATFORM</span>
+                        </div>
+                        <h4 class="text-xl font-bold text-ink group-hover:text-accent transition-colors">Smart Street Light Platform</h4>
+                        <p class="text-xs text-ink-muted leading-relaxed">
+                            An ESP32-connected monitoring platform for adaptive street lighting, vehicle detection, lamp-fault status and remote dashboard control across multiple lamp nodes.
+                        </p>
+                    </div>
+                    <div class="pt-6 space-y-3">
+                        <div class="font-mono text-[11px] text-ink-light">ESP32 · MQTT · WebSocket · Sensor Telemetry</div>
+                        <a href="#contact" class="inline-flex items-center gap-1.5 text-xs font-mono font-medium text-ink hover:text-accent transition-colors">
+                            <span>View Project</span>
+                            <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- IoT Systems & Technical Projects -->
+        <section id="iot" class="py-20 border-t border-surface-200 space-y-12">
+            <!-- Section Introduction -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start reveal">
+                <div class="lg:col-span-7 space-y-4">
+                    <div class="inline-flex items-center gap-2">
+                        <i data-lucide="radio-tower" class="w-4 h-4 text-accent"></i>
+                        <span class="font-mono text-xs uppercase tracking-wider text-accent font-semibold">IoT · Embedded · Connected Systems</span>
+                    </div>
+                    <h2 class="text-3xl sm:text-4xl font-bold tracking-tight text-ink">IoT Systems & Technical Projects</h2>
+                    <p class="text-ink-muted text-base leading-relaxed max-w-2xl">
+                        From connected prototypes to technical guidance, I work across the IoT development lifecycle — planning system architecture, integrating sensors and microcontrollers, connecting dashboards and automation platforms, and troubleshooting implementation issues.
+                    </p>
+                </div>
+
+                <div class="lg:col-span-5">
+                    <div class="rounded-2xl bg-surface-100 border border-surface-200 p-5 sm:p-6">
+                        <div class="flex items-center justify-between pb-4 border-b border-surface-200">
+                            <span class="font-mono text-xs font-semibold text-ink uppercase tracking-wider">Development Capabilities</span>
+                            <i data-lucide="workflow" class="w-4 h-4 text-accent"></i>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-5 gap-y-3 pt-4 text-sm text-ink-muted">
+                            <div class="flex items-center gap-2"><i data-lucide="clipboard-list" class="w-4 h-4 text-accent"></i><span>Project Planning</span></div>
+                            <div class="flex items-center gap-2"><i data-lucide="cpu" class="w-4 h-4 text-accent"></i><span>ESP32 / Arduino</span></div>
+                            <div class="flex items-center gap-2"><i data-lucide="cable" class="w-4 h-4 text-accent"></i><span>Sensor Integration</span></div>
+                            <div class="flex items-center gap-2"><i data-lucide="layout-dashboard" class="w-4 h-4 text-accent"></i><span>IoT Dashboards</span></div>
+                            <div class="flex items-center gap-2"><i data-lucide="refresh-cw" class="w-4 h-4 text-accent"></i><span>Automation Workflows</span></div>
+                            <div class="flex items-center gap-2"><i data-lucide="wrench" class="w-4 h-4 text-accent"></i><span>Troubleshooting</span></div>
+                            <div class="flex items-center gap-2"><i data-lucide="boxes" class="w-4 h-4 text-accent"></i><span>Prototype Development</span></div>
+                            <div class="flex items-center gap-2"><i data-lucide="graduation-cap" class="w-4 h-4 text-accent"></i><span>Technical Guidance</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- IoT Project Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Visitor Log -->
+                <article class="group rounded-2xl bg-surface-100 border border-surface-200 p-6 sm:p-7 hover:border-surface-300 transition-all reveal">
+                    <div class="flex items-start justify-between gap-4 mb-5">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-accent-subtle border border-accent/10 flex items-center justify-center text-accent">
+                                <i data-lucide="scan-line" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <div class="font-mono text-[10px] uppercase tracking-wider text-accent font-semibold">01 · Connected Logging</div>
+                                <h3 class="text-xl font-bold text-ink mt-1">Visitor Log</h3>
+                            </div>
+                        </div>
+                        <span class="shrink-0 px-2.5 py-1 rounded-full bg-surface-50 border border-surface-200 font-mono text-[10px] text-ink-muted">Prototype</span>
+                    </div>
+                    <p class="text-sm text-ink-muted leading-relaxed">
+                        Manual visitor records can be slow and difficult to track. I developed an RFID-based visitor logging system that automatically records entry activity into Google Sheets using ESP32 and Google Apps Script.
+                    </p>
+<div class="flex flex-wrap gap-2 mt-5">
+                        <span class="px-2.5 py-1 rounded-md bg-surface-50 border border-surface-200 text-ink-muted font-mono text-[11px]">ESP32</span>
+                        <span class="px-2.5 py-1 rounded-md bg-surface-50 border border-surface-200 text-ink-muted font-mono text-[11px]">RFID</span>
+                        <span class="px-2.5 py-1 rounded-md bg-surface-50 border border-surface-200 text-ink-muted font-mono text-[11px]">Google Sheets</span>
+                        <span class="px-2.5 py-1 rounded-md bg-surface-50 border border-surface-200 text-ink-muted font-mono text-[11px]">Automation</span>
+                    </div>
+                </article>
+
+                <!-- Smart IoT Farm -->
+                <article class="group rounded-2xl bg-surface-100 border border-surface-200 p-6 sm:p-7 hover:border-surface-300 transition-all reveal">
+                    <div class="flex items-start justify-between gap-4 mb-5">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-accent-subtle border border-accent/10 flex items-center justify-center text-accent">
+                                <i data-lucide="sprout" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <div class="font-mono text-[10px] uppercase tracking-wider text-accent font-semibold">02 · Monitoring & Automation</div>
+                                <h3 class="text-xl font-bold text-ink mt-1">Smart IoT Farm</h3>
+                            </div>
+                        </div>
+                        <span class="shrink-0 px-2.5 py-1 rounded-full bg-surface-50 border border-surface-200 font-mono text-[10px] text-ink-muted">Prototype</span>
+                    </div>
+                    <p class="text-sm text-ink-muted leading-relaxed">
+                        A sensor-based farm monitoring and automation prototype developed with technical guidance on ESP32 integration, sensor monitoring, device control, and Blynk dashboard implementation.
+                    </p>
+<div class="flex flex-wrap gap-2 mt-5">
+                        <span class="px-2.5 py-1 rounded-md bg-surface-50 border border-surface-200 text-ink-muted font-mono text-[11px]">ESP32</span>
+                        <span class="px-2.5 py-1 rounded-md bg-surface-50 border border-surface-200 text-ink-muted font-mono text-[11px]">Sensors</span>
+                        <span class="px-2.5 py-1 rounded-md bg-surface-50 border border-surface-200 text-ink-muted font-mono text-[11px]">Blynk</span>
+                        <span class="px-2.5 py-1 rounded-md bg-surface-50 border border-surface-200 text-ink-muted font-mono text-[11px]">IoT Dashboard</span>
+                    </div>
+                </article>
+
+                <!-- Weather Monitoring -->
+                <article class="group rounded-2xl bg-surface-100 border border-surface-200 p-6 sm:p-7 hover:border-surface-300 transition-all reveal">
+                    <div class="flex items-start justify-between gap-4 mb-5">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-accent-subtle border border-accent/10 flex items-center justify-center text-accent">
+                                <i data-lucide="cloud-sun" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <div class="font-mono text-[10px] uppercase tracking-wider text-accent font-semibold">03 · Real-Time Telemetry</div>
+                                <h3 class="text-xl font-bold text-ink mt-1">Weather Monitoring</h3>
+                            </div>
+                        </div>
+                        <span class="shrink-0 px-2.5 py-1 rounded-full bg-surface-50 border border-surface-200 font-mono text-[10px] text-ink-muted">Prototype</span>
+                    </div>
+                    <p class="text-sm text-ink-muted leading-relaxed">
+                        An IoT environmental monitoring system designed to collect temperature and humidity data and make sensor readings available through a real-time cloud dashboard.
+                    </p>
+<div class="flex flex-wrap gap-2 mt-5">
+                        <span class="px-2.5 py-1 rounded-md bg-surface-50 border border-surface-200 text-ink-muted font-mono text-[11px]">ESP32</span>
+                        <span class="px-2.5 py-1 rounded-md bg-surface-50 border border-surface-200 text-ink-muted font-mono text-[11px]">DHT11</span>
+                        <span class="px-2.5 py-1 rounded-md bg-surface-50 border border-surface-200 text-ink-muted font-mono text-[11px]">Arduino Cloud</span>
+                        <span class="px-2.5 py-1 rounded-md bg-surface-50 border border-surface-200 text-ink-muted font-mono text-[11px]">Real-time Data</span>
+                    </div>
+                </article>
+
+                <!-- Voice Control -->
+                <article class="group rounded-2xl bg-surface-100 border border-surface-200 p-6 sm:p-7 hover:border-surface-300 transition-all reveal">
+                    <div class="flex items-start justify-between gap-4 mb-5">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-accent-subtle border border-accent/10 flex items-center justify-center text-accent">
+                                <i data-lucide="audio-lines" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <div class="font-mono text-[10px] uppercase tracking-wider text-accent font-semibold">04 · Connected Control</div>
+                                <h3 class="text-xl font-bold text-ink mt-1">Voice Control</h3>
+                            </div>
+                        </div>
+                        <span class="shrink-0 px-2.5 py-1 rounded-full bg-surface-50 border border-surface-200 font-mono text-[10px] text-ink-muted">Prototype</span>
+                    </div>
+                    <p class="text-sm text-ink-muted leading-relaxed">
+                        A connected-device control prototype integrating ESP32 with cloud-based voice commands to trigger device actions remotely.
+                    </p>
+<div class="flex flex-wrap gap-2 mt-5">
+                        <span class="px-2.5 py-1 rounded-md bg-surface-50 border border-surface-200 text-ink-muted font-mono text-[11px]">ESP32</span>
+                        <span class="px-2.5 py-1 rounded-md bg-surface-50 border border-surface-200 text-ink-muted font-mono text-[11px]">Voice Control</span>
+                        <span class="px-2.5 py-1 rounded-md bg-surface-50 border border-surface-200 text-ink-muted font-mono text-[11px]">IoT</span>
+                        <span class="px-2.5 py-1 rounded-md bg-surface-50 border border-surface-200 text-ink-muted font-mono text-[11px]">Automation</span>
+                    </div>
+                </article>
+            </div>
+
+            
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="py-20 border-t border-surface-200 space-y-12">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                
+                <!-- Left Title -->
+                <div class="lg:col-span-4 space-y-3 reveal">
+                    <span class="font-mono text-xs text-accent font-semibold uppercase tracking-wider">Background</span>
+                    <h2 class="text-3xl font-bold text-ink">About Me</h2>
+                </div>
+
+                <!-- Right Narrative & Simple Timeline -->
+                <div class="lg:col-span-8 space-y-10 reveal">
+                    <div class="space-y-4 text-base text-ink-muted leading-relaxed">
+                        <p>
+                            I'm a developer based in Malaysia, interested in building useful digital products that solve real-world problems.
+                        </p>
+                        <p>
+                            My work sits mainly between web development and IoT. I enjoy turning ideas into working prototypes — from business management systems and productivity tools to ESP32-based connected devices.
+                        </p>
+                        <p>
+                            I'm currently focused on strengthening my software development skills while building practical projects that reflect how I learn, solve problems, and create.
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Tools & Technologies (No Progress Bars) -->
+        <section id="skills" class="py-20 border-t border-surface-200 space-y-12">
+            <div class="max-w-2xl space-y-2 reveal">
+                <span class="font-mono text-xs text-accent font-semibold uppercase tracking-wider">Tech Stack</span>
+                <h2 class="text-3xl font-bold text-ink">Tools & Technologies</h2>
+                <p class="text-ink-muted text-sm">Technologies and software tools I regularly work with for development and hardware integration.</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 reveal">
+                
+                <!-- Category 01 -->
+                <div class="space-y-4">
+                    <div class="pb-2 border-b border-surface-200 font-mono text-xs font-semibold text-accent flex items-center justify-between">
+                        <span>DEVELOPMENT</span>
+                        <i data-lucide="code" class="w-3.5 h-3.5"></i>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1.5 rounded-lg bg-surface-100 border border-surface-200 text-xs font-medium text-ink">HTML5</span>
+                        <span class="px-3 py-1.5 rounded-lg bg-surface-100 border border-surface-200 text-xs font-medium text-ink">CSS3 / Tailwind</span>
+                        <span class="px-3 py-1.5 rounded-lg bg-surface-100 border border-surface-200 text-xs font-medium text-ink">JavaScript</span>
+                        <span class="px-3 py-1.5 rounded-lg bg-surface-100 border border-surface-200 text-xs font-medium text-ink">PHP</span>
+                        <span class="px-3 py-1.5 rounded-lg bg-surface-100 border border-surface-200 text-xs font-medium text-ink">Laravel</span>
+                        <span class="px-3 py-1.5 rounded-lg bg-surface-100 border border-surface-200 text-xs font-medium text-ink">React</span>
+                        <span class="px-3 py-1.5 rounded-lg bg-surface-100 border border-surface-200 text-xs font-medium text-ink">Next.js</span>
+                    </div>
+                </div>
+
+                <!-- Category 02 -->
+                <div class="space-y-4">
+                    <div class="pb-2 border-b border-surface-200 font-mono text-xs font-semibold text-accent flex items-center justify-between">
+                        <span>BACKEND & DATA</span>
+                        <i data-lucide="database" class="w-3.5 h-3.5"></i>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1.5 rounded-lg bg-surface-100 border border-surface-200 text-xs font-medium text-ink">MySQL</span>
+                        <span class="px-3 py-1.5 rounded-lg bg-surface-100 border border-surface-200 text-xs font-medium text-ink">Supabase</span>
+                        <span class="px-3 py-1.5 rounded-lg bg-surface-100 border border-surface-200 text-xs font-medium text-ink">REST APIs</span>
+                        <span class="px-3 py-1.5 rounded-lg bg-surface-100 border border-surface-200 text-xs font-medium text-ink">Authentication</span>
+                    </div>
+                </div>
+
+                <!-- Category 03 -->
+                <div class="space-y-4">
+                    <div class="pb-2 border-b border-surface-200 font-mono text-xs font-semibold text-accent flex items-center justify-between">
+                        <span>IOT & HARDWARE</span>
+                        <i data-lucide="radio" class="w-3.5 h-3.5"></i>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1.5 rounded-lg bg-surface-100 border border-surface-200 text-xs font-medium text-ink">ESP32</span>
+                        <span class="px-3 py-1.5 rounded-lg bg-surface-100 border border-surface-200 text-xs font-medium text-ink">NodeMCU</span>
+                        <span class="px-3 py-1.5 rounded-lg bg-surface-100 border border-surface-200 text-xs font-medium text-ink">Arduino IDE</span>
+                        <span class="px-3 py-1.5 rounded-lg bg-surface-100 border border-surface-200 text-xs font-medium text-ink">Sensors (DHT/Ultrasonic)</span>
+                        <span class="px-3 py-1.5 rounded-lg bg-surface-100 border border-surface-200 text-xs font-medium text-ink">Arduino Cloud</span>
+                    </div>
+                </div>
+
+                <!-- Category 04 -->
+                <div class="space-y-4">
+                    <div class="pb-2 border-b border-surface-200 font-mono text-xs font-semibold text-accent flex items-center justify-between">
+                        <span>TOOLS & WORKFLOW</span>
+                        <i data-lucide="wrench" class="w-3.5 h-3.5"></i>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1.5 rounded-lg bg-surface-100 border border-surface-200 text-xs font-medium text-ink">Git</span>
+                        <span class="px-3 py-1.5 rounded-lg bg-surface-100 border border-surface-200 text-xs font-medium text-ink">GitHub</span>
+                        <span class="px-3 py-1.5 rounded-lg bg-surface-100 border border-surface-200 text-xs font-medium text-ink">VS Code</span>
+                        <span class="px-3 py-1.5 rounded-lg bg-surface-100 border border-surface-200 text-xs font-medium text-ink">Figma</span>
+                        <span class="px-3 py-1.5 rounded-lg bg-surface-100 border border-surface-200 text-xs font-medium text-ink">Netlify</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-20 border-t border-surface-200 space-y-12">
+            <div class="max-w-2xl space-y-3 reveal">
+                <span class="font-mono text-xs text-accent font-semibold uppercase tracking-wider">CONNECT</span>
+                <h2 class="text-3xl sm:text-4xl font-bold text-ink">Let's build something useful.</h2>
+                <p class="text-ink-muted text-base">
+                      Have a project, opportunity, or idea you'd like to discuss? Feel free to reach out.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 reveal">
+                
+                <!-- WhatsApp Contact Card -->
+                <!-- Replace 601XXXXXXXX with your actual WhatsApp number in international format -->
+                <a href="https://wa.me/601136553684" target="_blank" rel="noopener noreferrer" class="group p-6 rounded-2xl bg-surface-100 border border-surface-200 hover:border-accent transition-all space-y-4">
+                    <div class="p-3 rounded-xl bg-surface-50 w-fit border border-surface-200 text-ink group-hover:text-accent transition-colors">
+                        <i data-lucide="message-circle" class="w-5 h-5"></i>
+                    </div>
+                    <div class="space-y-1">
+                        <span class="font-mono text-[11px] text-ink-muted uppercase">WhatsApp</span>
+                        <div class="text-base font-semibold text-ink group-hover:text-accent transition-colors">Chat on WhatsApp</div>
+                    </div>
+                    <div class="text-xs text-ink-muted flex items-center gap-1">
+                        <span>Start a WhatsApp conversation</span>
+                        <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                    </div>
+                </a>
+
+                <!-- GitHub Contact Card -->
+                <!-- Replace https://github.com/ with actual link -->
+                <a href="https://github.com/iamsyahirah" target="_blank" rel="noopener noreferrer" class="group p-6 rounded-2xl bg-surface-100 border border-surface-200 hover:border-accent transition-all space-y-4">
+                    <div class="p-3 rounded-xl bg-surface-50 w-fit border border-surface-200 text-ink group-hover:text-accent transition-colors">
+                        <i data-lucide="folder-git-2" class="w-5 h-5"></i>
+                    </div>
+                    <div class="space-y-1">
+                        <span class="font-mono text-[11px] text-ink-muted uppercase">GitHub Profile</span>
+                        <div class="text-base font-semibold text-ink group-hover:text-accent transition-colors">github.com</div>
+                    </div>
+                    <div class="text-xs text-ink-muted flex items-center gap-1">
+                        <span>Explore code repositories</span>
+                        <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+                    </div>
+                </a>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Minimal Footer -->
+    <footer class="border-t border-surface-200 py-12 bg-surface-50">
+        <div class="max-w-6xl mx-auto px-6 sm:px-8 space-y-8">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+                
+                <!-- Brand Info -->
+                <div class="space-y-1">
+                    <a href="#hero" class="font-mono text-sm font-semibold text-ink hover:text-accent transition-colors">SYAHIRAH.XYZ</a>
+                </div>
+
+                <!-- Footer Links -->
+                <div class="flex flex-wrap items-center gap-6 text-xs font-medium text-ink-muted">
+                    <a href="#work" class="hover:text-ink transition-colors">Work</a>
+                    <a href="#iot" class="hover:text-ink transition-colors">IoT</a>
+                    <a href="#about" class="hover:text-ink transition-colors">About</a>
+                    <a href="#skills" class="hover:text-ink transition-colors">Skills</a>
+                    <a href="#contact" class="hover:text-ink transition-colors">Contact</a>
+                </div>
+            </div>
+
+            <div class="pt-6 border-t border-surface-200/60 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-ink-muted">
+                <div>
+                    © 2026 Syahirah. Built with curiosity & code.
+                </div>
+
+                <!-- Back To Top Button -->
+                <button id="back-to-top" type="button" aria-label="Back to top" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-surface-200 bg-surface-100 hover:bg-surface-200 text-ink transition-colors font-mono text-xs">
+                    <span>Back to top</span>
+                    <i data-lucide="arrow-up" class="w-3.5 h-3.5"></i>
+                </button>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Vanilla JavaScript Interactions -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize Lucide icons
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+
+            // Mobile Menu Toggle Logic
+            const menuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const iconOpen = document.getElementById('menu-icon-open');
+            const iconClose = document.getElementById('menu-icon-close');
+            const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+
+            const toggleMobileMenu = () => {
+                const isOpen = !mobileMenu.classList.contains('hidden');
+                if (isOpen) {
+                    mobileMenu.classList.add('hidden');
+                    iconOpen.classList.remove('hidden');
+                    iconClose.classList.add('hidden');
+                } else {
+                    mobileMenu.classList.remove('hidden');
+                    iconOpen.classList.add('hidden');
+                    iconClose.classList.remove('hidden');
+                }
+            };
+
+            if (menuBtn) {
+                menuBtn.addEventListener('click', toggleMobileMenu);
+            }
+
+            // Close mobile menu when a link is clicked
+            mobileNavLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    if (!mobileMenu.classList.contains('hidden')) {
+                        toggleMobileMenu();
+                    }
+                });
+            });
+
+            // Navbar background transition on scroll
+            const navbar = document.getElementById('navbar');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 40) {
+                    navbar.classList.add('bg-surface-50/90', 'backdrop-blur-md', 'border-surface-200', 'shadow-xs');
+                    navbar.classList.remove('py-5');
+                    navbar.classList.add('py-3.5');
+                } else {
+                    navbar.classList.remove('bg-surface-50/90', 'backdrop-blur-md', 'border-surface-200', 'shadow-xs');
+                    navbar.classList.remove('py-3.5');
+                    navbar.classList.add('py-5');
+                }
+            });
+
+            // Scroll Reveal Observer (Respecting reduced motion)
+            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            
+            if (!prefersReducedMotion) {
+                const revealElements = document.querySelectorAll('.reveal');
+                const observerOptions = {
+                    root: null,
+                    threshold: 0.1,
+                    rootMargin: '0px 0px -40px 0px'
+                };
+
+                const revealObserver = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('active');
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, observerOptions);
+
+                revealElements.forEach(el => revealObserver.observe(el));
+            } else {
+                // If reduced motion is active, reveal immediately
+                document.querySelectorAll('.reveal').forEach(el => el.classList.add('active'));
+            }
+
+            // Back to Top Button
+            const backToTopBtn = document.getElementById('back-to-top');
+            if (backToTopBtn) {
+                backToTopBtn.addEventListener('click', () => {
+                    window.scrollTo({
+                        top: 0,
+                        behavior: prefersReducedMotion ? 'auto' : 'smooth'
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+</html>
